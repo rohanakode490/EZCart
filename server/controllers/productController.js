@@ -20,6 +20,22 @@ exports.getAllProducts = async (req, res) => {
   });
 };
 
+// get single product/ details of it
+exports.getProductDetails = async (req, res, next) => {
+  const product = await Product.findById(req.params.id);
+
+  if (!product) {
+    return res.status(500).json({
+      success: false,
+      message: "Product Not Found",
+    });
+  }
+  res.status(200).json({
+    success: true,
+    product
+  });
+};
+
 // Update product - Admin
 exports.updateProduct = async (req, res, next) => {
   let product = await Product.findById(req.params.id);
@@ -41,21 +57,21 @@ exports.updateProduct = async (req, res, next) => {
   });
 };
 
-// Delete Product 
-exports.deleteProduct = async (req, res, next) =>{
+// Delete Product by the reference of the id
+exports.deleteProduct = async (req, res, next) => {
   const product = await Product.findById(req.params.id);
 
-  if(!product){
+  if (!product) {
     return res.status(500).json({
       success: false,
       message: "Product Not Found",
     });
   }
 
-  await product.deleteOne();
+  await product.deleteOne(); // delete the product
 
   res.status(200).json({
-    success:true,
-    message:"Product Deleted Succesfully"
-  })
-}
+    success: true,
+    message: "Product Deleted Succesfully",
+  });
+};
