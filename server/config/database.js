@@ -6,9 +6,6 @@ const connectDB = () => {
     .then((data) => {
       console.log(`MongoDb connected with server`);
     })
-    .catch((err) => {
-      console.log(err);
-    });
 };
 
 module.exports = connectDB;
