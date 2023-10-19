@@ -1,8 +1,8 @@
 // Creating Token and saving in cookie
 
 const sendToken = (user, statusCode, res) => {
-    const token = user.getJWTToken(); //function getJWTToken defined in model/user.js
-    
+  const token = user.getJWTToken(); //function getJWTToken defined in model/user.js
+
   // cookie options
   const options = {
     expires: new Date(
