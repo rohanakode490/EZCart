@@ -169,6 +169,7 @@ exports.UpdatePassword = catchAsyncError(async (req, res, next) => {
   });
 });
 
+
 // Update User Profile  
 exports.updateProfile = catchAsyncError(async (req, res, next) => {
   
@@ -187,5 +188,73 @@ exports.updateProfile = catchAsyncError(async (req, res, next) => {
   res.status(200).json({
     success: true,
     user,
+  });
+});
+
+
+// get all users - ADMIN
+exports.getAllUser = catchAsyncError(async (req, res, next)=>{
+  const users = await User.find();
+  
+  res.status(200).json({
+    success: true,
+    users,
+  });
+})
+
+
+// get single users - ADMIN
+exports.getSingleUser = catchAsyncError(async (req, res, next)=>{
+  const user = await User.findById(req.params.id);
+
+  if(!user){
+    return next(new ErrorHandler(`User does not exists with ${req.params.id}`, 400))
+  }
+  
+  res.status(200).json({
+    success: true,
+    user,
+  });
+})
+
+
+
+// Update User Role - BY ADMIN  
+exports.updateUserRole = catchAsyncError(async (req, res, next) => {
+  
+  const newUserData = {
+    name:req.body.name,
+    email:req.body.email,
+    role:req.body.role
+  }
+
+  const user = await User.findByIdAndUpdate(req.params.id, newUserData,{
+    new: true,
+    runValidators: true,
+    useFindAndModify:false,
+  })
+
+  res.status(200).json({
+    success: true,
+    user,
+  });
+});
+
+
+// Delete User Role - BY ADMIN  
+exports.deleteUser = catchAsyncError(async (req, res, next) => {
+  
+  //TO DELETE PROFILE PHOTO LATER........
+
+  const user = await User.findById(req.params.id)
+
+  if(!user){
+    return next(new ErrorHandler(`User does not exists with ${req.params.id}`, 400))
+  }
+  await user.deleteOne();
+
+  res.status(200).json({
+    success: true,
+    message:"User Deleted Successfully"
   });
 });
