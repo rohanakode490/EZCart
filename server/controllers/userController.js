@@ -131,3 +131,61 @@ exports.resetPassword = catchAsyncError(async (req, res, next) => {
 
   sendToken(user, 200, res);
 });
+
+// Get user Detail - only if the user is logged in
+exports.getUserDetails = catchAsyncError(async (req, res, next) => {
+  const user = await User.findById(req.user.id);
+
+  res.status(200).json({
+    success: true,
+    user,
+  });
+});
+
+
+// Update User Password
+exports.UpdatePassword = catchAsyncError(async (req, res, next) => {
+  const user = await User.findById(req.user.id).select("+password");
+
+  const PasswordMatched = await user.comparePassword(req.body.oldPassword); //function comparePassword defined in model/user.js
+
+  if (!PasswordMatched) {
+    return next(new ErrorHandler("Old Password is incorrect", 400));
+  }
+
+  if (req.body.newPassword !== req.body.confirmPassword) {
+    return next(new ErrorHandler("Passwords does not match", 400));
+  }
+
+  user.password = req.body.newPassword;
+
+  await user.save();
+
+  sendToken(user, 200, res);
+
+  res.status(200).json({
+    success: true,
+    user,
+  });
+});
+
+// Update User Profile  
+exports.updateProfile = catchAsyncError(async (req, res, next) => {
+  
+  //TO ADD PROFILE PHOTO LATER........
+  const newUserData = {
+    name:req.body.name,
+    email:req.body.email,
+  }
+
+  const user = await User.findByIdAndUpdate(req.user.id, newUserData,{
+    new: true,
+    runValidators: true,
+    useFindAndModify:false,
+  })
+
+  res.status(200).json({
+    success: true,
+    user,
+  });
+});
