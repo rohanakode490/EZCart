@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import './App.css'
 import Header from './components/Header'
 import WebFont from 'webfontloader'
+import Footer from './components/Footer';
 
 function App() {
   useEffect(() => {
@@ -16,6 +17,8 @@ function App() {
   return (
     <>
       <Header />
+
+      <Footer/>
     </>
   )
 }

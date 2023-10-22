@@ -1,13 +1,15 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { ReactNavbar } from 'overlay-navbar'
-import {MdAccountCircle } from "react-icons/md";
-import {MdSearch } from "react-icons/md";
-import {MdAddShoppingCart } from "react-icons/md";
+import { MdAccountCircle } from "react-icons/md";
+import { MdSearch } from "react-icons/md";
+import { MdAddShoppingCart } from "react-icons/md";
+import { logo } from "../assets/index"
+
 
 const options = {
   burgerColorHover: "#eb4034",
-  // logo,
-  // logoWidth: "20vmax",
+  logo,
+  logoWidth: "20vmax",
   navColor1: "white",
   logoHoverSize: "10px",
   logoHoverColor: "#eb4034",
@@ -27,12 +29,12 @@ const options = {
   nav4justifyContent: "flex-start",
   link1ColorHover: "#eb4034",
   link1Margin: "1vmax",
-  profileIcon:true,
-  searchIcon:true,
-  cartIcon:true,
-  ProfileIconElement: MdAccountCircle, 
-  SearchIconElement:MdSearch,
-  CartIconElement:MdAddShoppingCart,
+  profileIcon: true,
+  searchIcon: true,
+  cartIcon: true,
+  ProfileIconElement: MdAccountCircle,
+  SearchIconElement: MdSearch,
+  CartIconElement: MdAddShoppingCart,
   profileIconUrl: "/login",
   profileIconColor: "rgba(35, 35, 35,0.8)",
   searchIconColor: "rgba(35, 35, 35,0.8)",
@@ -41,10 +43,19 @@ const options = {
   searchIconColorHover: "#eb4034",
   cartIconColorHover: "#eb4034",
   cartIconMargin: "1vmax",
-};
+}
+
 
 const Header = () => {
-  return <ReactNavbar {...options} />;
+  const [toggle, setToggle] = useState(true)
+  const handleToggle = () => {
+    setToggle(prev => !prev)
+  }
+  return (
+    <ReactNavbar  className="flex flex-1 justify-center" {...options} />
+    
+  )
+
 };
 
 export default Header
