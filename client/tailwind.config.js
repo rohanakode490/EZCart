@@ -13,6 +13,10 @@ export default {
         'vmax': '1000px',
         'vmin': '1000px',
       },
+      fontFamily: {
+        "robo":"Roboto",
+        "gill":['Gill Sans', 'Gill Sans MT', 'Calibri', 'Trebuchet MS', 'sans-serif']
+      }
     },
   },
   plugins: [],
