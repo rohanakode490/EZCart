@@ -3,7 +3,7 @@ import { ReactNavbar } from 'overlay-navbar'
 import { MdAccountCircle } from "react-icons/md";
 import { MdSearch } from "react-icons/md";
 import { MdAddShoppingCart } from "react-icons/md";
-import { logo } from "../assets/index"
+import { logo } from "../../../assets/index"
 
 
 const options = {

@@ -1,8 +1,10 @@
 import { useEffect } from 'react'
 import './App.css'
-import Header from './components/Header'
+import Header from './components/layout/Header/Header'
 import WebFont from 'webfontloader'
-import Footer from './components/Footer';
+import Footer from './components/layout/Footer/Footer';
+import { Route, Routes } from 'react-router-dom';
+import Home from './components/Home/Home';
 
 function App() {
   useEffect(() => {
@@ -17,8 +19,10 @@ function App() {
   return (
     <>
       <Header />
-
-      <Footer/>
+      <Routes>
+        <Route exact path="/" element={<Home />} />
+      </Routes>
+      <Footer />
     </>
   )
 }

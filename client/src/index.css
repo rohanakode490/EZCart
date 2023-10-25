@@ -2,15 +2,3 @@
 @tailwind components;
 @tailwind utilities;
 
-h1, h2, h3, h4{
-    font-family: "Roboto"
-}
-
-a{
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    transition: all 0.5s;
-}
-
-a:hover{
-    color: #eb4034;
-}
