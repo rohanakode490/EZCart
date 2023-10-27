@@ -9,7 +9,7 @@ const product = {
     name: "Mobile",
     price: "3000",
     _id: "sample",
-    images: [{ url: "" }]
+    images: [{ url: "https://m.media-amazon.com/images/I/61A+wkddftL._AC_SY300_SX300_.jpg" }]
 }
 
 const Home = () => {
@@ -25,6 +25,13 @@ const Home = () => {
             <h2 className="homeHeading">Featured Products</h2>
 
             <div className="container" id="container">
+                <Product product={product} />
+                <Product product={product} />
+                <Product product={product} />
+                <Product product={product} />
+                <Product product={product} />
+                <Product product={product} />
+                <Product product={product} />
                 <Product product={product} />
             </div>
         </>
