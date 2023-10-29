@@ -16,7 +16,8 @@ exports.createProduct = catchAsyncError(async (req, res, next) => {
 });
 
 // get all the products data to display
-exports.getAllProducts = catchAsyncError(async (req, res) => {
+exports.getAllProducts = catchAsyncError(async (req, res, next) => {
+  
   const resultPerPage = 8; //how many products to show
   const productCount = await Product.countDocuments();
 
