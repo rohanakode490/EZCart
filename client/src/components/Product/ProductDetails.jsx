@@ -2,22 +2,28 @@ import React, { Fragment, useEffect } from 'react'
 import Carousel from 'react-material-ui-carousel'
 import './ProductDetails.css'
 import { useDispatch, useSelector } from 'react-redux'
-import { getProductDetails } from '../../actions/productAction'
+import { clearErrors, getProductDetails } from '../../actions/productAction'
 import { useParams } from 'react-router-dom'
 import ReactStars from 'react-rating-stars-component'
 import ReviewCard from './ReviewCard.jsx'
 import Loader from '../layout/Loader/Loader'
+import {useAlert} from "react-alert"
 
 const ProductDetails = () => {
 
     const { id } = useParams();
     const dispatch = useDispatch();
+    const alert = useAlert()
 
     const { product, error, loading } = useSelector((state) => state.productDetails)
 
     useEffect(() => {
+        if(error){
+            alert.error(error)
+            dispatch(clearErrors())
+        }
         dispatch(getProductDetails(id))
-    }, [dispatch, id])
+    }, [dispatch, id, error, alert])
 
     // React rating options
     const options = {
