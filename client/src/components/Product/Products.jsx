@@ -6,6 +6,8 @@ import ProductCard from '../Home/ProductCard'
 import './Products.css'
 import { useParams } from 'react-router-dom'
 import Pagination from 'react-js-pagination'
+import Slider from '@mui/material/Slider'
+import Typography from '@mui/material/Typography';
 
 const Products = () => {
     const dispatch = useDispatch();
@@ -15,22 +17,28 @@ const Products = () => {
 
     // for pagination
     const [currentPage, setCurrentPage] = useState(1)
+    // for filters
+    const [price, setPrice] = useState([0, 25000])
 
     // from the redux-reducer
-    const { products, loading, error, productsCount, resultPerPage } = useSelector(state => state.products)
-
-    console.log(productsCount)
+    const { products, loading, error, productsCount, resultPerPage, filteredProductsCount } = useSelector(state => state.products)
 
     // for pagination
     const setCurrentPageNo = (e) => {
         setCurrentPage(e)
     }
 
+    // for filters
+    const priceHandler = (event, newprice) => {
+        setPrice(newprice)
+    }
+
     useEffect(() => {
-        dispatch(getProduct(keyword, currentPage))
+        dispatch(getProduct(keyword, currentPage, price))
 
-    }, [dispatch, keyword, currentPage])
+    }, [dispatch, keyword, currentPage, price])
 
+    let count = filteredProductsCount;
 
     return (
         <>
@@ -48,8 +56,22 @@ const Products = () => {
                             ))}
                     </div>
 
+                    {/* Filtering Options */}
+                    <div className="filterBox">
+                        {/* price */}
+                        <Typography>Price</Typography>
+                        <Slider
+                            value={price}
+                            onChange={priceHandler}
+                            valueLabelDisplay='auto'
+                            aria-labelledby='range-slider'
+                            min={0}
+                            max={25000}
+                        />
+                    </div>
+
                     {/* when we have less products than the limit to show on 1 page */}
-                    {resultPerPage < productsCount && (
+                    {resultPerPage < count && (
                         // Pagination 
                         <div className="paginationBox">
                             <Pagination
