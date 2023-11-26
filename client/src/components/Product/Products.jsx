@@ -9,6 +9,11 @@ import Pagination from 'react-js-pagination'
 import Slider from '@mui/material/Slider'
 import Typography from '@mui/material/Typography';
 
+// categories
+const categories = [
+    "Laptop", "SmartPhones", "Camera", "Tops", "Bottoms", "Attire", "Footwear"
+]
+
 const Products = () => {
     const dispatch = useDispatch();
 
@@ -19,6 +24,10 @@ const Products = () => {
     const [currentPage, setCurrentPage] = useState(1)
     // for filters
     const [price, setPrice] = useState([0, 25000])
+    // for categories
+    const [category, setCategory] = useState('')
+    // for rating
+    const [ratings, setRatings] = useState(0)
 
     // from the redux-reducer
     const { products, loading, error, productsCount, resultPerPage, filteredProductsCount } = useSelector(state => state.products)
@@ -34,9 +43,9 @@ const Products = () => {
     }
 
     useEffect(() => {
-        dispatch(getProduct(keyword, currentPage, price))
+        dispatch(getProduct(keyword, currentPage, price, category, ratings))
 
-    }, [dispatch, keyword, currentPage, price])
+    }, [dispatch, keyword, currentPage, price, category, ratings])
 
     let count = filteredProductsCount;
 
@@ -68,6 +77,36 @@ const Products = () => {
                             min={0}
                             max={25000}
                         />
+
+
+                        {/* Categories */}
+                        <Typography>Categories</Typography>
+                        <ul className="categoryBox">
+                            {categories.map((category) => (
+                                <li
+                                    className='category-link'
+                                    key={category}
+                                    onClick={() => setCategory(category)}
+                                >
+                                    {category}
+                                </li>
+                            ))}
+                        </ul>
+
+                        {/* Rating */}
+                        <fieldset>
+                        <Typography component="legend">Ratings Above</Typography>
+                        <Slider
+                            value={ratings}
+                            onChange={(e, newRating)=>{
+                                setRatings(newRating)
+                            }}
+                            valueLabelDisplay='auto'
+                            aria-labelledby='continuous-slider'
+                            min={0}
+                            max={5}
+                        />
+                        </fieldset>
                     </div>
 
                     {/* when we have less products than the limit to show on 1 page */}
