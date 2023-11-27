@@ -7,7 +7,9 @@ import './Products.css'
 import { useParams } from 'react-router-dom'
 import Pagination from 'react-js-pagination'
 import Slider from '@mui/material/Slider'
+import {useAlert} from 'react-alert'
 import Typography from '@mui/material/Typography';
+import MetaData from '../layout/MetaData'
 
 // categories
 const categories = [
@@ -16,6 +18,7 @@ const categories = [
 
 const Products = () => {
     const dispatch = useDispatch();
+    const alert = useAlert();
 
     // product keyword to search
     const { keyword } = useParams()
@@ -43,9 +46,13 @@ const Products = () => {
     }
 
     useEffect(() => {
-        dispatch(getProduct(keyword, currentPage, price, category, ratings))
+        if(error){
+            alert.error(error)
+            dispatch(clearErrors)
+        }
+        dispatch(getProduct(keyword, currentPage, price, category, ratings, alert, error))
 
-    }, [dispatch, keyword, currentPage, price, category, ratings])
+    }, [dispatch, keyword, currentPage, price, category, ratings, alert, error])
 
     let count = filteredProductsCount;
 
@@ -55,6 +62,7 @@ const Products = () => {
                 <Loader />
             ) : (
                 <Fragment>
+                    <MetaData  title="PRODUCTS -- EZCART"/>
                     <h2 className="productsHeading">Products</h2>
 
                     {/* Load the products */}

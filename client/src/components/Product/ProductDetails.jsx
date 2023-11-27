@@ -8,6 +8,7 @@ import ReactStars from 'react-rating-stars-component'
 import ReviewCard from './ReviewCard.jsx'
 import Loader from '../layout/Loader/Loader'
 import {useAlert} from "react-alert"
+import MetaData from '../layout/MetaData.jsx'
 
 const ProductDetails = () => {
 
@@ -42,6 +43,7 @@ const ProductDetails = () => {
                 <Loader />
             ) : (
                 <Fragment>
+                    <MetaData title={`${product.name} -- EZCART`}/>
                     <div className="ProductDetails">
                         {/* image carousel */}
                         <div>

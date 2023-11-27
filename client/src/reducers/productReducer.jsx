@@ -14,7 +14,7 @@ export const productReducer = (state = { products: [] }, action) => {
     switch (action.type) {
         case ALL_PRODUCT_REQUEST: //product requested
             return {
-                loadingL: true,
+                loading: true,
                 products: []
             }
 
