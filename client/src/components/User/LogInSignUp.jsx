@@ -5,7 +5,7 @@ import { MdOutlineLockOpen } from "react-icons/md";
 import Loader from '../layout/Loader/Loader'
 import './LogInSignUp.css'
 import { useDispatch, useSelector } from "react-redux";
-import { clearErrors, login } from "../../actions/userActions";
+import { clearErrors, login, register } from "../../actions/userActions";
 import { useAlert } from "react-alert";
 
 const LogInSignUp = () => {
@@ -52,7 +52,7 @@ const LogInSignUp = () => {
         myForm.set("email", email);
         myForm.set("password", password);
         myForm.set("avatar", avatar);
-        console.log("SignUp Form Submitted")
+        dispatch(register(myForm))
     }
 
     const registerDataChange = (e) => {
@@ -77,9 +77,9 @@ const LogInSignUp = () => {
             alert.error(error)
             dispatch(clearErrors())
         }
-        
+
         // after login return to account page
-        if(isAuthenticated){
+        if (isAuthenticated) {
             navigate("/account")
         }
 
@@ -178,7 +178,7 @@ const LogInSignUp = () => {
                                         name="email"
                                         placeholder="Email"
                                         required
-                                        value={loginEmail}
+                                        value={email}
                                         onChange={registerDataChange}
                                     />
                                 </div>
@@ -188,15 +188,19 @@ const LogInSignUp = () => {
                                     <input
                                         type="password"
                                         placeholder="Password"
-                                        name="Password"
+                                        name="password"
                                         required
-                                        value={loginPassword}
+                                        value={password}
                                         onChange={registerDataChange}
                                     />
                                 </div>
                                 <div id="registerImage">
                                     <img src={avatarPreview} alt="Avatar Preview" />
-                                    <input type="file" name="avatar" accept="image/*" onChange={registerDataChange} />
+                                    <input 
+                                        type="file" 
+                                        name="avatar" 
+                                        accept="image/*" 
+                                        onChange={registerDataChange} />
                                 </div>
 
                                 {/* BUTTON */}
