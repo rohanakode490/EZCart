@@ -9,6 +9,8 @@ import ProductDetails from './components/Product/ProductDetails';
 import Products from './components/Product/Products';
 import Search from './components/Product/Search';
 import LogInSignUp from './components/User/LogInSignUp';
+import store from './store'
+import { loadUser } from './actions/userActions';
 
 function App() {
   useEffect(() => {
@@ -18,6 +20,8 @@ function App() {
         families: ["Roboto", "Droid Sans", "Chilanka"],
       },
     });
+
+    store.dispatch(loadUser())
   }, []);
 
   return (
