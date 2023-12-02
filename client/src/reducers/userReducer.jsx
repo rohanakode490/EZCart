@@ -27,7 +27,6 @@ export const userReducer = (state = { user: [] }, action) => {
                 loading: true,
                 isAuthenticated: false,
             };
-        case UPDATE_PROFILE_SUCCESS:
         case REGISTER_USER_SUCCESS:
         case LOAD_USER_SUCCESS:
             return {

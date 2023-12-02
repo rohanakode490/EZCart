@@ -29,7 +29,7 @@ const UserOptions = ({ user }) => {
             options.unshift({ icon: <MdDashboard />, name: "Dashboard", func: dashboard })
         }
     }
-
+    
     function dashboard() {
         navigate('/dashboard')
     }
@@ -64,7 +64,7 @@ const UserOptions = ({ user }) => {
                 className='speedDial'
                 icon={<img
                     className='speedDialIcon'
-                    src={user.avatar.url ? user.avatar.url : '/Profile.png'}
+                    src={user!==true ? user.avatar.url : '/Profile.png'}
                     alt='Profile'
                 />}
             >

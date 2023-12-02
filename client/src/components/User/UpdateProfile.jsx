@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { FiMail, FiUser } from "react-icons/fi";
 import Loader from '../layout/Loader/Loader'
 import './UpdateProfile.css'
@@ -15,7 +15,7 @@ const UpdateProfile = () => {
     const navigate = useNavigate()
 
     const { user } = useSelector(state => state.user)
-    const { error, isUpdated, loading } = useSelector(state => state.profile)
+    const { error, isUpdated, loading } = useSelector((state) => state.profile)
 
 
     const [name, setName] = useState('')
@@ -33,7 +33,6 @@ const UpdateProfile = () => {
         myForm.set("email", email);
         myForm.set("avatar", avatar);
         dispatch(updateProfile(myForm))
-        navigate("/login")
     }
 
     const updateProfileDataChange = (e) => {
@@ -51,28 +50,27 @@ const UpdateProfile = () => {
 
     useEffect(() => {
         if (user) {
-            setName(user.name)
-            setEmail(user.email)
-            setAvatarPreview(user.avatar.url)
+            setName(user.name);
+            setEmail(user.email);
+            setAvatarPreview(user.avatar.url);
         }
 
         if (error) {
-            alert.error(error)
-            dispatch(clearErrors())
+            alert.error(error);
+            dispatch(clearErrors());
         }
 
-        // after UPDATE return to account page
         if (isUpdated) {
-            alert.success("Profile Updated Successfully")
-            dispatch(loadUser())
-            navigate("/account")
+            alert.success("Profile Updated Successfully");
+            dispatch(loadUser());
+
+            navigate("/account");
 
             dispatch({
-                type: UPDATE_PROFILE_RESET
-            })
+                type: UPDATE_PROFILE_RESET,
+            });
         }
-
-    }, [dispatch, error, alert, isUpdated, user, navigate])
+    }, [dispatch, error, alert, navigate, user, isUpdated]);
 
     return (
         <>
@@ -98,7 +96,7 @@ const UpdateProfile = () => {
                                         required
                                         name="name"
                                         value={name}
-                                        onChange={(e)=>setName(e.target.value)}
+                                        onChange={(e) => setName(e.target.value)}
                                     />
                                 </div>
 
@@ -111,7 +109,7 @@ const UpdateProfile = () => {
                                         placeholder="Email"
                                         required
                                         value={email}
-                                        onChange={(e)=>setEmail(e.target.value)}
+                                        onChange={(e) => setEmail(e.target.value)}
                                     />
                                 </div>
                                 <div id="updateProfileImage">

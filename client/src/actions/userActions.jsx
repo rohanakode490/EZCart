@@ -52,7 +52,7 @@ export const register = (userData) => async (dispatch) => {
 export const loadUser = () => async (dispatch) => {
     try {
         dispatch({ type: LOAD_USER_REQUEST })
-
+        
         const { data } = await axios.get(`/api/v1/me`);
 
         dispatch({ type: LOAD_USER_SUCCESS, payload: data.user })
@@ -77,13 +77,13 @@ export const logout = () => async (dispatch) => {
 //     UPDATE_PROFILE_RESET,
 export const updateProfile = (userData) => async (dispatch) => {
     try {
-        dispatch({ type: UPDATE_PROFILE_REQUEST })
+        dispatch({ type: UPDATE_PROFILE_REQUEST });
 
-        const config = { headers: { "Content-Type": "multipart/form-data" } }
+    const config = { headers: { "Content-Type": "multipart/form-data" } };
 
-        const { data } = await axios.put(`/api/v1/me/update`, userData, config);
+    const { data } = await axios.put(`/api/v1/me/update`, userData, config);
 
-        dispatch({ type: UPDATE_PROFILE_SUCCESS, payload: data.success })
+    dispatch({ type: UPDATE_PROFILE_SUCCESS, payload: data.success });
     } catch (error) {
         dispatch({ type: UPDATE_PROFILE_FAIL, payload: error.response.data.message })
     }

@@ -5,7 +5,7 @@ const ProtectedRoute = ({ children }) => {
     const navigate = useNavigate()
     const { loading, isAuthenticated } = useSelector(state => state.user)
     if (!loading && !isAuthenticated) {
-        navigate("/login")
+        navigate("/login");
         return null;
     }
     else {
@@ -14,3 +14,4 @@ const ProtectedRoute = ({ children }) => {
 }
 
 export default ProtectedRoute
+

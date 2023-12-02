@@ -6,7 +6,7 @@ const sendEmail = require("../utils/sendEmail.js");
 const crypto = require("crypto");
 const cloudinary = require("cloudinary");
 
-// Register 
+// Register
 exports.registerUser = catchAsyncError(async (req, res, next) => {
   const { name, email, password } = req.body;
 
@@ -67,6 +67,7 @@ exports.logout = catchAsyncError(async (req, res, next) => {
   });
 });
 
+
 // Password Reset / Forgot Password
 exports.forgotPassword = catchAsyncError(async (req, res, next) => {
   const user = await User.findOne({ email: req.body.email });
@@ -109,6 +110,8 @@ exports.forgotPassword = catchAsyncError(async (req, res, next) => {
   }
 });
 
+
+
 // Reset Password
 exports.resetPassword = catchAsyncError(async (req, res, next) => {
   // creating Hashed Token
@@ -140,6 +143,8 @@ exports.resetPassword = catchAsyncError(async (req, res, next) => {
   sendToken(user, 200, res);
 });
 
+
+
 // Get user Detail - only if the user is logged in
 exports.getUserDetails = catchAsyncError(async (req, res, next) => {
   const user = await User.findById(req.user.id);
@@ -149,6 +154,8 @@ exports.getUserDetails = catchAsyncError(async (req, res, next) => {
     user,
   });
 });
+
+
 
 // Update User Password
 exports.UpdatePassword = catchAsyncError(async (req, res, next) => {
@@ -170,19 +177,36 @@ exports.UpdatePassword = catchAsyncError(async (req, res, next) => {
 
   sendToken(user, 200, res);
 
-  res.status(200).json({
-    success: true,
-    user,
-  });
 });
+
 
 // Update User Profile
 exports.updateProfile = catchAsyncError(async (req, res, next) => {
-  //TO ADD PROFILE PHOTO LATER........
   const newUserData = {
     name: req.body.name,
     email: req.body.email,
   };
+
+  // Add new image url to the database
+  if (req.body.avatar !== "") {
+    const user = await User.findById(req.user.id);
+
+    const imageId = user.avatar.public_id;
+
+    await cloudinary.v2.uploader.destroy(imageId);
+
+    // Upload Image
+    const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
+      folder: "Avatars",
+      width: 150,
+      crop: "scale",
+    });
+
+    newUserData.avatar = {
+      public_id: myCloud.public_id,
+      url: myCloud.secure_url,
+    };
+  }
 
   const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
     new: true,
@@ -191,9 +215,11 @@ exports.updateProfile = catchAsyncError(async (req, res, next) => {
   });
 
   res.status(200).json({
-    success: true
+    success: true,
   });
 });
+
+
 
 // get all users - ADMIN
 exports.getAllUser = catchAsyncError(async (req, res, next) => {
@@ -204,6 +230,8 @@ exports.getAllUser = catchAsyncError(async (req, res, next) => {
     users,
   });
 });
+
+
 
 // get single users - ADMIN
 exports.getSingleUser = catchAsyncError(async (req, res, next) => {
@@ -221,6 +249,8 @@ exports.getSingleUser = catchAsyncError(async (req, res, next) => {
   });
 });
 
+
+
 // Update User Role - BY ADMIN
 exports.updateUserRole = catchAsyncError(async (req, res, next) => {
   const newUserData = {
@@ -229,7 +259,7 @@ exports.updateUserRole = catchAsyncError(async (req, res, next) => {
     role: req.body.role,
   };
 
-  const user = await User.findByIdAndUpdate(req.params.id, newUserData, {
+   await User.findByIdAndUpdate(req.params.id, newUserData, {
     new: true,
     runValidators: true,
     useFindAndModify: false,
@@ -237,9 +267,10 @@ exports.updateUserRole = catchAsyncError(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
-    user,
   });
 });
+
+
 
 // Delete User Role - BY ADMIN
 exports.deleteUser = catchAsyncError(async (req, res, next) => {

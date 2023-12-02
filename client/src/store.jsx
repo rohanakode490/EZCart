@@ -13,7 +13,7 @@ const reducer = combineReducers({
     products: productReducer,
     productDetails: productDetailsReducer,
     user: userReducer,
-    profile: profileReducer
+    profile: profileReducer,
 });
 
 let initialState = {};
