@@ -53,6 +53,7 @@ const LogInSignUp = () => {
         myForm.set("password", password);
         myForm.set("avatar", avatar);
         dispatch(register(myForm))
+        navigate("/login")
     }
 
     const registerDataChange = (e) => {
