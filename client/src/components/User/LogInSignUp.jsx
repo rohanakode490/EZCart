@@ -50,12 +50,11 @@ const LogInSignUp = () => {
 
         myForm.set("name", name);
         myForm.set("email", email);
-        myForm.set("password", password);
         myForm.set("avatar", avatar);
         dispatch(register(myForm))
-        navigate("/login")
     }
 
+    // used in SIGNUP form to set user INFO into "user" state
     const registerDataChange = (e) => {
         if (e.target.name === 'avatar') {
             const reader = new FileReader();
@@ -84,9 +83,9 @@ const LogInSignUp = () => {
             navigate("/account")
         }
 
-    }, [dispatch, error, alert, isAuthenticated])
+    }, [dispatch, error, alert, isAuthenticated, navigate])
 
-
+    // to switch between Register and Login Section
     const switchTabs = (e, tab) => {
         if (tab === 'login') {
             switcherTab.current.classList.add("shiftToNeutral")
