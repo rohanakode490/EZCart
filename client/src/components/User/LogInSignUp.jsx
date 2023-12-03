@@ -73,11 +73,13 @@ const LogInSignUp = () => {
     }
 
     useEffect(() => {
+        
         if (error) {
             alert.error(error)
             dispatch(clearErrors())
         }
 
+        console.log("here")
         // after login return to account page
         if (isAuthenticated) {
             navigate("/account")
