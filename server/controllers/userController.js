@@ -82,12 +82,15 @@ exports.forgotPassword = catchAsyncError(async (req, res, next) => {
   // saved to database
   await user.save({ validateBeforeSave: false });
 
-  const resetPasswordURL = `${req.protocol}://${req.get(
-    "host"
-  )}/api/v1/password/reset/${resetToken}`;
+  // const resetPasswordURL = `${req.protocol}://${req.get(
+  //   "host"
+  // )}/api/v1/password/reset/${resetToken}`;
+
+  // TEMPORARY - CHANGE THE TOKEN
+  const resetPasswordURL = `${process.env.FRONTEND_URL}/password/reset/${resetToken}`;
 
   // message to be sent to the email of the user
-  const message = `Your password reset token is: - \n\n ${resetPasswordURL} \n\n If you have not request this email then, please ignore this email.`;
+  const message = `Your password reset token is: - \n\n ${resetPasswordURL} \n\n If you have not request this email then, please ignore it.`;
 
   try {
     await sendEmail({
@@ -127,10 +130,10 @@ exports.resetPassword = catchAsyncError(async (req, res, next) => {
   });
 
   if (!user) {
-    return next(new ErrorHandler("Invalid email or password", 400));
+    return next(new ErrorHandler("Reset Password Token is invalid or has been expired", 400));
   }
   if (req.body.password !== req.body.confirmPassword) {
-    return next(new ErrorHandler("Password Does not match", 404));
+    return next(new ErrorHandler("Password Does not match", 400));
   }
 
   // password changed

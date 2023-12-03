@@ -15,7 +15,6 @@ const UpdatePassword = () => {
     const alert = useAlert()
     const navigate = useNavigate()
 
-    const { user } = useSelector(state => state.user)
     const { error, isUpdated, loading } = useSelector((state) => state.profile)
 
 
