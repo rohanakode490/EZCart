@@ -50,6 +50,7 @@ const LogInSignUp = () => {
 
         myForm.set("name", name);
         myForm.set("email", email);
+        myForm.set("password", password);
         myForm.set("avatar", avatar);
         dispatch(register(myForm))
     }
@@ -79,7 +80,6 @@ const LogInSignUp = () => {
             dispatch(clearErrors())
         }
 
-        console.log("here")
         // after login return to account page
         if (isAuthenticated) {
             navigate("/account")

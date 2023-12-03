@@ -15,11 +15,16 @@ import {
     UPDATE_PROFILE_FAIL,
     UPDATE_PASSWORD_REQUEST,
     UPDATE_PASSWORD_SUCCESS,
-    UPDATE_PASSWORD_RESET,
     UPDATE_PASSWORD_FAIL,
+    FORGOT_PASSWORD_REQUEST,
+    FORGOT_PASSWORD_SUCCESS,
+    FORGOT_PASSWORD_FAIL,
     CLEAR_ERRORS
 } from '../constants/userConstants'
 import axios from 'axios'
+
+
+
 
 // LOGIN
 export const login = (email, password) => async (dispatch) => {
@@ -37,6 +42,9 @@ export const login = (email, password) => async (dispatch) => {
 }
 
 
+
+
+
 // REGISTER
 export const register = (userData) => async (dispatch) => {
     try {
@@ -52,6 +60,9 @@ export const register = (userData) => async (dispatch) => {
     }
 }
 
+
+
+
 // Load User into the state
 export const loadUser = () => async (dispatch) => {
     try {
@@ -65,6 +76,9 @@ export const loadUser = () => async (dispatch) => {
     }
 }
 
+
+
+
 // logout User 
 export const logout = () => async (dispatch) => {
     try {
@@ -75,6 +89,9 @@ export const logout = () => async (dispatch) => {
         dispatch({ type: LOGOUT_FAIL, payload: error.response.data.message });
     }
 };
+
+
+
 
 // Update User info - uses "profileReducer" 
 export const updateProfile = (userData) => async (dispatch) => {
@@ -91,6 +108,9 @@ export const updateProfile = (userData) => async (dispatch) => {
     }
 }
 
+
+
+
 // Update Password - uses "profileReducer" 
 export const updatePassword = (passwords) => async (dispatch) => {
     try {
@@ -105,6 +125,27 @@ export const updatePassword = (passwords) => async (dispatch) => {
         dispatch({ type: UPDATE_PASSWORD_FAIL, payload: error.response.data.message })
     }
 }
+
+
+
+
+// forgot Password - uses "forgotPasswordReducer" 
+export const forgotPassword = (email) => async (dispatch) => {
+    try {
+        dispatch({ type: FORGOT_PASSWORD_REQUEST })
+
+        const config = { headers: { "Content-Type": "application/json" } }
+
+        const { data } = await axios.post(`/api/v1/password/forgot`, email, config);
+
+        dispatch({ type: FORGOT_PASSWORD_SUCCESS, payload: data.user })
+    } catch (error) {
+        dispatch({ type: FORGOT_PASSWORD_FAIL, payload: error.response.data.message })
+    }
+}
+
+
+
 
 // Clear all the errors
 export const clearErrors = () => async (dispatch) => {

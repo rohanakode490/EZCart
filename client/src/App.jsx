@@ -17,6 +17,7 @@ import Profile from './components/User/Profile';
 import ProtectedRoute from './components/Route/ProtectedRoute';
 import UpdateProfile from './components/User/UpdateProfile';
 import UpdatePassword from './components/User/UpdatePassword';
+import ForgotPassword from './components/User/ForgotPassword';
 
 function App() {
 
@@ -58,6 +59,7 @@ function App() {
             <UpdatePassword />
           </ProtectedRoute>
         } />
+        <Route exact path="/password/forgot" element={<ForgotPassword />} />
         <Route exact path="/login" element={<LogInSignUp />} />
       </Routes>
       <Footer />
