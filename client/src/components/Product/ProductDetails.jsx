@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import Carousel from 'react-material-ui-carousel'
 import './ProductDetails.css'
 import { useDispatch, useSelector } from 'react-redux'
@@ -7,19 +7,44 @@ import { useParams } from 'react-router-dom'
 import ReactStars from 'react-rating-stars-component'
 import ReviewCard from './ReviewCard.jsx'
 import Loader from '../layout/Loader/Loader'
-import {useAlert} from "react-alert"
+import { useAlert } from "react-alert"
 import MetaData from '../layout/MetaData.jsx'
+import { addItemsToCart } from '../../actions/cartAction.jsx'
 
 const ProductDetails = () => {
 
     const { id } = useParams();
     const dispatch = useDispatch();
     const alert = useAlert()
+    const params = useParams();
 
     const { product, error, loading } = useSelector((state) => state.productDetails)
 
+    // number of products to add to cart / buy
+    const [quantity, setQuantity] = useState(1)
+
+    const increaseQuantity = () => {
+        if (product.stock <= quantity) {
+            return;
+        }
+        setQuantity(prev => prev + 1);
+    }
+
+    const decreaseQuantity = () => {
+        if (quantity <= 1) {
+            return;
+        }
+        setQuantity(prev => prev - 1);
+    }
+
+    // add items to cart
+    const addToCartHandler = () => {
+        dispatch(addItemsToCart(params.id, quantity))
+        alert.success("Item added to cart")
+    }
+
     useEffect(() => {
-        if(error){
+        if (error) {
             alert.error(error)
             dispatch(clearErrors())
         }
@@ -43,7 +68,7 @@ const ProductDetails = () => {
                 <Loader />
             ) : (
                 <Fragment>
-                    <MetaData title={`${product.name} -- EZCART`}/>
+                    <MetaData title={`${product.name} -- EZCART`} />
                     <div className="ProductDetails">
                         {/* image carousel */}
                         <div>
@@ -74,11 +99,11 @@ const ProductDetails = () => {
                                 {/* Cart */}
                                 <div className='detailsBlock-3-1'>
                                     <div className='detailsBlock-3-1-1'>
-                                        <button>-</button>
-                                        <input type="number" value="1" />
-                                        <button>+</button>
+                                        <button onClick={decreaseQuantity}>-</button>
+                                        <input readOnly type="number" value={quantity} />
+                                        <button onClick={increaseQuantity}>+</button>
                                     </div>{" "}
-                                    <button>Add to Cart</button>
+                                    <button onClick={addToCartHandler}>Add to Cart</button>
                                 </div>
 
                                 <p>
