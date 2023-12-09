@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FiMail, FiUser } from "react-icons/fi";
 import { MdOutlineLockOpen } from "react-icons/md";
 import Loader from '../layout/Loader/Loader'
@@ -13,6 +13,7 @@ const LogInSignUp = () => {
     const dispatch = useDispatch()
     const alert = useAlert()
     const navigate = useNavigate()
+    const location = useLocation()
 
     const { error, loading, isAuthenticated } = useSelector(state => state.user)
 
@@ -73,6 +74,8 @@ const LogInSignUp = () => {
         }
     }
 
+    const redirect = location.search ? ('/' + location.search.split("=")[1]) : "/account"
+
     useEffect(() => {
         
         if (error) {
@@ -83,9 +86,10 @@ const LogInSignUp = () => {
         // after login return to account page
         if (isAuthenticated) {
             navigate("/account")
+            navigate(redirect)
         }
 
-    }, [dispatch, error, alert, isAuthenticated, navigate])
+    }, [dispatch, error, alert, isAuthenticated, navigate, redirect])
 
     // to switch between Register and Login Section
     const switchTabs = (e, tab) => {
@@ -198,10 +202,10 @@ const LogInSignUp = () => {
                                 </div>
                                 <div id="registerImage">
                                     <img src={avatarPreview} alt="Avatar Preview" />
-                                    <input 
-                                        type="file" 
-                                        name="avatar" 
-                                        accept="image/*" 
+                                    <input
+                                        type="file"
+                                        name="avatar"
+                                        accept="image/*"
                                         onChange={registerDataChange} />
                                 </div>
 

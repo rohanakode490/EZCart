@@ -4,11 +4,13 @@ import CartItemCard from './CartItemCard'
 import { useDispatch, useSelector } from 'react-redux'
 import { addItemsToCart, removeItemsFromCart } from '../../actions/cartAction'
 import { Typography } from '@mui/material'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { MdRemoveShoppingCart } from "react-icons/md";
 
 const Cart = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+
 
     // from redux state
     const { cartItems } = useSelector(state => state.cart)
@@ -36,6 +38,11 @@ const Cart = () => {
     // dispatch remove cart items
     const deleteCartItemsa = (id) => {
         dispatch(removeItemsFromCart(id))
+    }
+
+    // check out Order
+    const checkoutHandler = () => {
+        navigate("/login?redirect=shipping")
     }
 
     return (
@@ -89,7 +96,7 @@ const Cart = () => {
                             </div>
                             <div></div>
                             <div className="checkOutBtn">
-                                <button>Check Out</button>
+                                <button onClick={checkoutHandler}>Check Out</button>
                             </div>
                         </div>
                     </div>
