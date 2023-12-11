@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import Typography from '@mui/material/Typography'
 import { useNavigate } from 'react-router-dom'
 
-const ConfirmOrder = ({ history }) => {
+const ConfirmOrder = () => {
 
     const navigate = useNavigate();
 

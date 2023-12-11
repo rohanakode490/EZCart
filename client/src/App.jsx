@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
 import Header from './components/layout/Header/Header'
 import WebFont from 'webfontloader'
@@ -22,11 +22,24 @@ import ResetPassword from './components/User/ResetPassword';
 import Cart from './components/Cart/Cart';
 import Shipping from './components/Cart/Shipping';
 import ConfirmOrder from './components/Cart/ConfirmOrder';
-
+import axios from 'axios';
+import Payment from './components/Cart/Payment';
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements } from "@stripe/react-stripe-js";
+import StripeContainer from './components/Cart/StripeContainer';
 
 function App() {
 
   const { isAuthenticated, user } = useSelector(state => state.user)
+
+  const [stripeApiKey, setStripeApiKey] = useState("")
+
+
+  // get the stripe API key
+  async function getStripeApiKey() {
+    const { data } = await axios.get("/api/v1/stripeapikey")
+    setStripeApiKey(data.stripeApiKey)
+  }
 
   useEffect(() => {
     //load the fonts first
@@ -37,6 +50,8 @@ function App() {
     });
 
     store.dispatch(loadUser())
+
+    getStripeApiKey()
   }, []);
 
   return (
@@ -59,7 +74,7 @@ function App() {
             <UpdateProfile />
           </ProtectedRoute>
         } />
-        
+
         <Route exact path='/password/update' element={
           <ProtectedRoute >
             <UpdatePassword />
@@ -82,6 +97,18 @@ function App() {
             <ConfirmOrder />
           </ProtectedRoute>
         } />
+
+        {stripeApiKey && (
+          <Route exact path='/process/payment' element={
+            <ProtectedRoute >
+              {/* <StripeContainer stripeApiKey={stripeApiKey}/> */}
+
+              <Elements stripe={loadStripe(stripeApiKey)}>
+                <Payment />
+              </Elements>
+            </ProtectedRoute>
+          } />
+        )}
 
       </Routes>
       <Footer />
