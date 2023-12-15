@@ -1,3 +1,4 @@
+import { useRef, useEffect } from 'react'
 import './Payment.css'
 import { useAlert } from 'react-alert'
 import { useNavigate } from 'react-router-dom'
@@ -13,14 +14,13 @@ import {
     useElements,
 } from "@stripe/react-stripe-js";
 import { MdCreditCard, MdEvent, MdVpnKey } from "react-icons/md";
-import { useRef } from 'react'
 import axios from 'axios'
-
+import { createOrder, clearErrors } from '../../actions/orderAction'
 
 const Payment = () => {
     const orderInfo = JSON.parse(sessionStorage.getItem("orderInfo"))
 
-    const dipatch = useDispatch()
+    const dispatch = useDispatch()
     const alert = useAlert()
     const stripe = useStripe()
     const elements = useElements()
@@ -29,11 +29,23 @@ const Payment = () => {
 
     const { shippingInfo, cartItems } = useSelector(state => state.cart)
     const { user } = useSelector(state => state.user)
-    // const { error } = useSelector(state => state.newOrder)
+    const { error } = useSelector(state => state.newOrder)
 
     // PAYMENT DATA
     const paymentData = {
-        amount: Math.round(orderInfo.totalPrice*100) //Ruppees to Paise
+        amount: Math.round(orderInfo.totalPrice * 100) //Ruppees to Paise
+    }
+
+
+    // create order to send to backend
+    const order = {
+        shippingInfo,
+        orderItems: cartItems,
+        // paymentInfo: , 
+        itemsPrice: orderInfo.subtotal,
+        taxPrice: orderInfo.tax,
+        shippingPrice: orderInfo.shippingCharges,
+        totalPrice: orderInfo.totalPrice,
     }
 
     const submitHandler = async (e) => {
@@ -56,6 +68,7 @@ const Payment = () => {
 
             if (!stripe || !elements) return;
 
+            // send the details of payment to STRIPE
             const result = await stripe.confirmCardPayment(client_secret, {
                 payment_method: {
                     card: elements.getElement(CardNumberElement),
@@ -79,6 +92,12 @@ const Payment = () => {
             } else {
                 if (result.paymentIntent.status === "succeeded") {
                     // order to be placed
+                    order.paymentInfo = {
+                        id: result.paymentIntent.id,
+                        status: result.paymentIntent.status,
+                    };
+
+                    dispatch(createOrder(order))
 
                     navigate("/success")
                 } else {
@@ -91,6 +110,15 @@ const Payment = () => {
             alert.error(error.response.data.message)
         }
     }
+
+
+    useEffect(() => {
+        if (error) {
+            alert.error(error)
+            dispatch(clearErrors())
+        }
+    }, [dispatch, alert, error])
+
 
     return (
         <>
