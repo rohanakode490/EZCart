@@ -18,7 +18,7 @@ const orderSchema = new mongoose.Schema({
       type: String,
       required: [true, "Please enter your country name"],
     },
-    pincode: {
+    pinCode: {
       type: Number,
       required: [true, "Please enter your pincode"],
     },

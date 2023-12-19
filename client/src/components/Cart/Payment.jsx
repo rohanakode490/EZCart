@@ -1,11 +1,8 @@
-import { useRef, useEffect } from 'react'
-import './Payment.css'
-import { useAlert } from 'react-alert'
-import { useNavigate } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
-import MetaData from '../layout/MetaData'
-import CheckoutSteps from './CheckoutSteps'
-import Typography from '@mui/material/Typography'
+import React, { Fragment, useEffect, useRef } from "react";
+import CheckoutSteps from "../Cart/CheckoutSteps";
+import { useSelector, useDispatch } from "react-redux";
+import MetaData from "../layout/MetaData";
+import { useAlert } from "react-alert";
 import {
     CardNumberElement,
     CardCvcElement,
@@ -13,40 +10,38 @@ import {
     useStripe,
     useElements,
 } from "@stripe/react-stripe-js";
+import axios from "axios";
+import "./payment.css";
 import { MdCreditCard, MdEvent, MdVpnKey } from "react-icons/md";
-import axios from 'axios'
-import { createOrder, clearErrors } from '../../actions/orderAction'
+import { createOrder, clearErrors } from "../../actions/orderAction";
+import Typography from '@mui/material/Typography'
+import { useNavigate } from 'react-router-dom'
 
 const Payment = () => {
-    const orderInfo = JSON.parse(sessionStorage.getItem("orderInfo"))
+    const orderInfo = JSON.parse(sessionStorage.getItem("orderInfo"));
 
-    const dispatch = useDispatch()
-    const alert = useAlert()
-    const stripe = useStripe()
-    const elements = useElements()
-    const payBtn = useRef(null)
-    const navigate = useNavigate()
+    const dispatch = useDispatch();
+    const alert = useAlert();
+    const stripe = useStripe();
+    const elements = useElements();
+    const payBtn = useRef(null);
+    const navigate = useNavigate();
 
-    const { shippingInfo, cartItems } = useSelector(state => state.cart)
-    const { user } = useSelector(state => state.user)
-    const { error } = useSelector(state => state.newOrder)
+    const { shippingInfo, cartItems } = useSelector((state) => state.cart);
+    const { user } = useSelector((state) => state.user);
+    const { error } = useSelector((state) => state.newOrder);
 
-    // PAYMENT DATA
     const paymentData = {
-        amount: Math.round(orderInfo.totalPrice * 100) //Ruppees to Paise
-    }
+        amount: Math.round(orderInfo.totalPrice * 100),
+    };
 
-
-    // create order to send to backend
     const order = {
-        shippingInfo,
         orderItems: cartItems,
-        // paymentInfo: , 
         itemsPrice: orderInfo.subtotal,
         taxPrice: orderInfo.tax,
         shippingPrice: orderInfo.shippingCharges,
         totalPrice: orderInfo.totalPrice,
-    }
+    };
 
     const submitHandler = async (e) => {
         e.preventDefault();
@@ -54,21 +49,21 @@ const Payment = () => {
         payBtn.current.disabled = true;
 
         try {
-
             const config = {
                 headers: {
-                    "Content-Type": "application/json"
-                }
-            }
-
-            // Send Details
-            const { data } = await axios.post("/api/v1/payment/process", paymentData, config);
+                    "Content-Type": "application/json",
+                },
+            };
+            const { data } = await axios.post(
+                "/api/v1/payment/process",
+                paymentData,
+                config
+            );
 
             const client_secret = data.client_secret;
 
             if (!stripe || !elements) return;
 
-            // send the details of payment to STRIPE
             const result = await stripe.confirmCardPayment(client_secret, {
                 payment_method: {
                     card: elements.getElement(CardNumberElement),
@@ -80,52 +75,56 @@ const Payment = () => {
                             city: shippingInfo.city,
                             state: shippingInfo.state,
                             postal_code: shippingInfo.pinCode,
-                            country: shippingInfo.country
-                        }
-                    }
-                }
-            })
+                            country: shippingInfo.country,
+                        },
+                    },
+                },
+            });
+
+            // before it was there as string have to convert it to int or the backend will throw error code 500
+            const newShippingInfo = { ...shippingInfo,
+                phoneNo: parseInt(shippingInfo.phoneNo),
+                pinCode: parseInt(shippingInfo.pinCode)
+            }
+
+            order.shippingInfo = newShippingInfo;
 
             if (result.error) {
-                payBtn.current.disabled = false
-                alert.error(result.error.message)
+                payBtn.current.disabled = false;
+
+                alert.error(result.error.message);
             } else {
                 if (result.paymentIntent.status === "succeeded") {
-                    // order to be placed
                     order.paymentInfo = {
                         id: result.paymentIntent.id,
                         status: result.paymentIntent.status,
                     };
 
-                    dispatch(createOrder(order))
-
-                    navigate("/success")
+                    dispatch(createOrder(order));
+                    navigate("/success");
                 } else {
-                    alert.error("There's some issue while processing payment")
+                    alert.error("There's some issue while processing payment ");
                 }
             }
-
         } catch (error) {
-            payBtn.current.disabled = false
-            alert.error(error.response.data.message)
+            payBtn.current.disabled = false;
+            alert.error(error.response.data.message);
         }
-    }
-
+    };
 
     useEffect(() => {
         if (error) {
-            alert.error(error)
-            dispatch(clearErrors())
+            alert.error(error);
+            dispatch(clearErrors());
         }
-    }, [dispatch, alert, error])
-
+    }, [dispatch, error, alert]);
 
     return (
-        <>
+        <Fragment>
             <MetaData title="Payment" />
             <CheckoutSteps activeStep={2} />
             <div className="paymentContainer">
-                <form className="paymentForm" onSubmit={(e) => submitHandler(e)}>
+                <form className="paymentForm" onSubmit={submitHandler}>
                     <Typography>Card Info</Typography>
                     <div>
                         <MdCreditCard />
@@ -142,14 +141,14 @@ const Payment = () => {
 
                     <input
                         type="submit"
-                        value={`Pay - \u20B9${orderInfo && orderInfo.totalPrice}`}
+                        value={`Pay - ₹${orderInfo && orderInfo.totalPrice}`}
                         ref={payBtn}
                         className="paymentFormBtn"
                     />
                 </form>
             </div>
-        </>
-    )
-}
+        </Fragment>
+    );
+};
 
-export default Payment
+export default Payment;

@@ -27,13 +27,13 @@ import Payment from './components/Cart/Payment';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from "@stripe/react-stripe-js";
 import OrderSuccess from './components/Cart/OrderSuccess';
+import MyOrders from './components/Order/MyOrders';
 
 function App() {
 
   const { isAuthenticated, user } = useSelector(state => state.user)
 
   const [stripeApiKey, setStripeApiKey] = useState("")
-
 
   // get the stripe API key
   async function getStripeApiKey() {
@@ -111,6 +111,12 @@ function App() {
         <Route exact path='/success' element={
           <ProtectedRoute >
             <OrderSuccess />
+          </ProtectedRoute>
+        } />
+
+        <Route exact path='/orders' element={
+          <ProtectedRoute >
+            <MyOrders />
           </ProtectedRoute>
         } />
 
