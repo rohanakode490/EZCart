@@ -28,6 +28,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from "@stripe/react-stripe-js";
 import OrderSuccess from './components/Cart/OrderSuccess';
 import MyOrders from './components/Order/MyOrders';
+import OrderDetails from './components/Order/OrderDetails';
 
 function App() {
 
@@ -117,6 +118,12 @@ function App() {
         <Route exact path='/orders' element={
           <ProtectedRoute >
             <MyOrders />
+          </ProtectedRoute>
+        } />
+
+        <Route exact path='/order/:id' element={
+          <ProtectedRoute >
+            <OrderDetails />
           </ProtectedRoute>
         } />
 
