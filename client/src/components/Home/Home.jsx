@@ -15,7 +15,7 @@ const Home = () => {
     const alert = useAlert();
 
     const dispatch = useDispatch();
-    const { loading, error, products,  } = useSelector(state => state.products)
+    const { loading, error, products } = useSelector(state => state.products)
 
     useEffect(() => {
         if (error) {
@@ -29,7 +29,9 @@ const Home = () => {
 
     return (
         <>
-            {loading ? <Loader /> :
+            {loading ? (
+                <Loader />
+            ) : (
                 <>
                     <MetaData title="EZCart - Shop whatever out want" />
                     <div className="banner">
@@ -47,7 +49,7 @@ const Home = () => {
                         ))}
                     </div>
                 </>
-            }
+            )}
         </>
     )
 }
