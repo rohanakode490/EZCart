@@ -67,7 +67,6 @@ exports.logout = catchAsyncError(async (req, res, next) => {
   });
 });
 
-
 // Password Reset / Forgot Password
 exports.forgotPassword = catchAsyncError(async (req, res, next) => {
   const user = await User.findOne({ email: req.body.email });
@@ -113,8 +112,6 @@ exports.forgotPassword = catchAsyncError(async (req, res, next) => {
   }
 });
 
-
-
 // Reset Password
 exports.resetPassword = catchAsyncError(async (req, res, next) => {
   // creating Hashed Token
@@ -130,7 +127,12 @@ exports.resetPassword = catchAsyncError(async (req, res, next) => {
   });
 
   if (!user) {
-    return next(new ErrorHandler("Reset Password Token is invalid or has been expired", 400));
+    return next(
+      new ErrorHandler(
+        "Reset Password Token is invalid or has been expired",
+        400
+      )
+    );
   }
   if (req.body.password !== req.body.confirmPassword) {
     return next(new ErrorHandler("Password Does not match", 400));
@@ -146,8 +148,6 @@ exports.resetPassword = catchAsyncError(async (req, res, next) => {
   sendToken(user, 200, res);
 });
 
-
-
 // Get user Detail - only if the user is logged in
 exports.getUserDetails = catchAsyncError(async (req, res, next) => {
   const user = await User.findById(req.user.id);
@@ -157,8 +157,6 @@ exports.getUserDetails = catchAsyncError(async (req, res, next) => {
     user,
   });
 });
-
-
 
 // Update User Password
 exports.UpdatePassword = catchAsyncError(async (req, res, next) => {
@@ -179,9 +177,7 @@ exports.UpdatePassword = catchAsyncError(async (req, res, next) => {
   await user.save();
 
   sendToken(user, 200, res);
-
 });
-
 
 // Update User Profile
 exports.updateProfile = catchAsyncError(async (req, res, next) => {
@@ -194,8 +190,8 @@ exports.updateProfile = catchAsyncError(async (req, res, next) => {
   if (req.body.avatar !== "") {
     const user = await User.findById(req.user.id);
 
+    // deleting image from cloud
     const imageId = user.avatar.public_id;
-
     await cloudinary.v2.uploader.destroy(imageId);
 
     // Upload Image
@@ -222,8 +218,6 @@ exports.updateProfile = catchAsyncError(async (req, res, next) => {
   });
 });
 
-
-
 // get all users - ADMIN
 exports.getAllUser = catchAsyncError(async (req, res, next) => {
   const users = await User.find();
@@ -233,8 +227,6 @@ exports.getAllUser = catchAsyncError(async (req, res, next) => {
     users,
   });
 });
-
-
 
 // get single users - ADMIN
 exports.getSingleUser = catchAsyncError(async (req, res, next) => {
@@ -252,8 +244,6 @@ exports.getSingleUser = catchAsyncError(async (req, res, next) => {
   });
 });
 
-
-
 // Update User Role - BY ADMIN
 exports.updateUserRole = catchAsyncError(async (req, res, next) => {
   const newUserData = {
@@ -262,7 +252,7 @@ exports.updateUserRole = catchAsyncError(async (req, res, next) => {
     role: req.body.role,
   };
 
-   await User.findByIdAndUpdate(req.params.id, newUserData, {
+  await User.findByIdAndUpdate(req.params.id, newUserData, {
     new: true,
     runValidators: true,
     useFindAndModify: false,
@@ -272,8 +262,6 @@ exports.updateUserRole = catchAsyncError(async (req, res, next) => {
     success: true,
   });
 });
-
-
 
 // Delete User Role - BY ADMIN
 exports.deleteUser = catchAsyncError(async (req, res, next) => {
@@ -286,6 +274,11 @@ exports.deleteUser = catchAsyncError(async (req, res, next) => {
       new ErrorHandler(`User does not exists with ${req.params.id}`, 400)
     );
   }
+
+  // deleting image from cloud
+  const imageId = user.avatar.public_id;
+  await cloudinary.v2.uploader.destroy(imageId);
+
   await user.deleteOne();
 
   res.status(200).json({
