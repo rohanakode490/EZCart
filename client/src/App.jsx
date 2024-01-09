@@ -40,6 +40,7 @@ import UpdateUser from './components/admin/UpdateUser';
 import ProductReviews from './components/admin/ProductReviews';
 import Contact from './components/layout/Contact/Contact';
 import About from './components/layout/About/About';
+import NotFound from './components/layout/NotFound/NotFound';
 
 function App() {
 
@@ -65,6 +66,10 @@ function App() {
 
     getStripeApiKey()
   }, []);
+
+  // no inspecting the page
+  addEventListener("contextmenu", (e)=>e.preventDefault())
+
 
   return (
     <>
@@ -193,7 +198,12 @@ function App() {
             <ProductReviews />
           </ProtectedRoute>
         } />
-
+        {/* <Route
+          element={
+            window.location.pathname === "/process/payment" ? null : <NotFound/>
+          }
+        /> */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
     </>
