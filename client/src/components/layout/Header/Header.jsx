@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { ReactNavbar } from 'overlay-navbar'
 import { MdAccountCircle } from "react-icons/md";
 import { MdSearch } from "react-icons/md";
@@ -47,10 +47,7 @@ const options = {
 
 
 const Header = () => {
-  const [toggle, setToggle] = useState(true)
-  const handleToggle = () => {
-    setToggle(prev => !prev)
-  }
+  
   return (
     <ReactNavbar  className="flex flex-1 justify-center" {...options} />
     

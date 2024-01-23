@@ -42,8 +42,9 @@ import Contact from './components/layout/Contact/Contact';
 import About from './components/layout/About/About';
 import NotFound from './components/layout/NotFound/NotFound';
 
-function App() {
+axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL
 
+function App() {
   const { isAuthenticated, user } = useSelector(state => state.user)
 
   const [stripeApiKey, setStripeApiKey] = useState("")
@@ -69,7 +70,6 @@ function App() {
 
   // no inspecting the page
   addEventListener("contextmenu", (e)=>e.preventDefault())
-
 
   return (
     <>

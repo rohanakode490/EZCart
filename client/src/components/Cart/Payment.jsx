@@ -11,7 +11,7 @@ import {
     useElements,
 } from "@stripe/react-stripe-js";
 import axios from "axios";
-import "./payment.css";
+import "./Payment.css";
 import { MdCreditCard, MdEvent, MdVpnKey } from "react-icons/md";
 import { createOrder, clearErrors } from "../../actions/orderAction";
 import Typography from '@mui/material/Typography'
