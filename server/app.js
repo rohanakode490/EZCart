@@ -6,6 +6,7 @@ const bodyParser = require("body-parser");
 const fileUpload = require("express-fileupload");
 const errorMiddleware = require("./middleware/error");
 const dotenv = require("dotenv");
+const rateLimit = require('express-rate-limit');
 
 // config
 dotenv.config({ path: "server/config/config.env" });
@@ -14,6 +15,11 @@ dotenv.config({ path: "server/config/config.env" });
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
+app.use(rateLimit({
+	windowMs: 15 * 60 * 1000,
+	limit: 100, 
+	legacyHeaders: false, 
+}))
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(fileUpload());
 
