@@ -69,7 +69,7 @@ function App() {
   }, []);
 
   // no inspecting the page
-  addEventListener("contextmenu", (e)=>e.preventDefault())
+  // addEventListener("contextmenu", (e)=>e.preventDefault())
 
   return (
     <>
