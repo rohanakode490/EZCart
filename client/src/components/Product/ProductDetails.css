@@ -1,4 +1,4 @@
-  .ProductDetails {
+.ProductDetails {
   background-color: rgb(255, 255, 255);
   width: 100vw;
   max-width: 100%;
@@ -23,7 +23,8 @@
 }
 
 .CarouselImage {
-  width: 20vmax;
+  width: 100%;
+  /* width: 20vmax; */
 }
 
 .detailsBlock-1 > h2 {
