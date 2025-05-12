@@ -31,7 +31,7 @@ import MyOrders from './components/Order/MyOrders';
 import OrderDetails from './components/Order/OrderDetails';
 import Dashboard from './components/admin/Dashboard';
 import ProductList from './components/admin/ProductList';
-import NewProduct from './components/admin/newProduct';
+import NewProduct from './components/admin/NewProduct';
 import UpdateProduct from './components/admin/UpdateProduct';
 import OrderList from './components/admin/OrderList';
 import ProcessOrder from './components/admin/ProcessOrder';
